@@ -11,6 +11,8 @@ class FluxDepthPreprocessor:
     def INPUT_TYPES(s):
         model_paths = ["LiheYoung/depth-anything-large-hf"]
         prefix = os.path.join(folder_paths.models_dir, "checkpoints")
+        if not os.path.exists(prefix):
+            os.makedirs(prefix, exist_ok=True)
         local_folders = os.listdir(prefix)
         local_folders = sorted(
             [

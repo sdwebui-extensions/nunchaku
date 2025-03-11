@@ -29,6 +29,8 @@ class SVDQuantFluxLoraLoader:
             "mit-han-lab/svdq-int4-flux.1-fill-dev",
         ]
         prefix = os.path.join(folder_paths.models_dir, "diffusion_models")
+        if not os.path.exists(prefix):
+            os.makedirs(prefix, exist_ok=True)
         local_base_model_folders = os.listdir(prefix)
         local_base_model_folders = sorted(
             [
@@ -104,7 +106,11 @@ class SVDQuantFluxLoraLoader:
                     else:
                         raise ValueError(f"Invalid LoRA format {lora_format}.")
                     prefix = os.path.join(folder_paths.models_dir, "diffusion_models")
+                    cache_prefix = os.path.join(folder_paths.cache_dir, "diffusion_models")
                     base_model_path = os.path.join(prefix, base_model_name, "transformer_blocks.safetensors")
+                    cache_base_model_path = os.path.join(cache_prefix, base_model_name, "transformer_blocks.safetensors")
+                    if not os.path.exists(base_model_path) and os.path.exists(cache_base_model_path):
+                        base_model_path = cache_base_model_path
                     if not os.path.exists(base_model_path):
                         # download from huggingface
                         base_model_path = os.path.join(base_model_name, "transformer_blocks.safetensors")
